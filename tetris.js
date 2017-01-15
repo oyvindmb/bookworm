@@ -106,7 +106,7 @@ const types = [{
         [0, 0],
         [0, 1],
         [0, -1],
-        [1, -1]
+        [-1, 1]
     ],
     [
         [0, 0],
@@ -116,7 +116,7 @@ const types = [{
     ],
     [
         [0, 0],
-        [1, 1],
+        [1, -1],
         [0, 1],
         [0, -1]
     ]
@@ -288,7 +288,9 @@ function rotatePiece(key) {
 
   if (o === template.points.length) {
     o = 0;
-  } else if (o === -1) { o = template.points.length - 1; }
+  } else if (o === -1) {
+    o = template.points.length - 1;
+  }
 
   // Translate the point
   const points = [];
@@ -303,11 +305,6 @@ function rotatePiece(key) {
     points[i] = point;
     point[0] = ocol + tmpCol;
     point[1] = orow + tmpRow;
-
-    // Outside grid?
-    if (point[0] > gridSize[0] || point[0] < 1 || point[1] < 1) {
-      return;
-    }
 
     if (testCollision(point)) {
       return;
@@ -422,7 +419,7 @@ function newPiece() {
   }
   lastColor = color;
 
-  // TODO Needs to be weighted away from Is?
+  // TODO Needs to be weighted away from I blocks?
   const template = types[Math.floor(Math.random() * 7)];
   const points = [];
   for (i = 0; i < template.points[0].length; i += 1) {
@@ -444,6 +441,7 @@ function newPiece() {
     if (testCollision(piece.points[i])) {
       // Game Over
       // console.log('Game over. Lines scored: ', lines);
+      // TODO Show score in number on the grid
       pieces = [piece];
 
       if (lines > winCondition) {
@@ -567,9 +565,11 @@ function draw() {
       const piece = pieces[i];
       for (j = 0; j < piece.points.length; j += 1) {
         const point = grid[piece.points[j][0]][piece.points[j][1]]; // Translate to grid coords
-        for (k = 0; k < point.length; k += 1) {
-          client.setPixel(point[k], piece.color[0], piece.color[1], piece.color[2]);
-          notBlack.push(point[k]);
+        if (point) {
+          for (k = 0; k < point.length; k += 1) {
+            client.setPixel(point[k], piece.color[0], piece.color[1], piece.color[2]);
+            notBlack.push(point[k]);
+          }
         }
       }
     }
