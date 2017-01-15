@@ -24,7 +24,7 @@
  */
 
 // Requirements
-const OPC = new require('./opc.js');
+const OPC = new require('../fadecandy/examples/node/opc.js');
 const keypress = new require('keypress');
 keypress(process.stdin);
 const fs = new require('fs');

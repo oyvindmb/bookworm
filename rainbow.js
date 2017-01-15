@@ -15,7 +15,7 @@
 */
 
 // Requirements
-const OPC = new require('./opc.js');
+const OPC = new require('../fadecandy/examples/node/opc.js');
 
 // Connect OPC
 const client = new OPC('localhost', 7890);
