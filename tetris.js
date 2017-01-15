@@ -61,9 +61,10 @@ const winCondition = 35;
 let winner;
 let lines = 0;
 let speed = 2000;
+let notBlack = [];
 const speedIncrease = 50;
 const blinkSpeed = 5000;
-const picture = JSON.parse(fs.readFileSync('/home/omb/bookshelf/drawings/ring.json', 'utf8'));
+const picture = JSON.parse(fs.readFileSync('ring.json', 'utf8'));
 for (let l = 0; l < picture.length; l += 1) {
   // Quirk; need to set the blink time for each blinking point
   if (picture[l].blink) {
@@ -405,7 +406,7 @@ function showWinScreen() {
       // Set point color
       const color = OPC.hsv(geom.hue, geom.s, geom.v);
       client.setPixel(geom.point[j], color[0], color[1], color[2]);
-      // notBlack.push(geom.point[j]);
+      notBlack.push(geom.point[j]);
     }
   }
 }
@@ -553,11 +554,11 @@ function draw() {
   let i;
   let j;
   let k;
-  const notBlack = [];
 
   if (winner) {
     showWinScreen();
   } else {
+    notBlack = [];
     drop();
 
     // Render pieces
