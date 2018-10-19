@@ -5,6 +5,49 @@ The first one; "Bookworm", I used to propose to my then girlfriend, now wife. Th
 
 This project requires the Fadecandy Server to be set up and opc.js from https://github.com/scanlime/fadecandy
 
+The configuration file for fadecandy server is set up like this (not I use two fadecandy controllers):
+
+{
+    "listen": [null, 7890],
+    "verbose": true,
+
+    "color": {
+        "gamma": 2.5,
+        "whitepoint": [1,1,1]
+    },
+
+    "devices": [
+        {
+            "type": "fadecandy",
+            "serial": "xxxxxxxxxxxxxxxxx",
+	    "led": false,
+            "map": [
+                [ 0, 0, 0, 36 ],
+                [ 0, 36, 64, 36 ],
+                [ 0, 72, 128, 36 ],
+                [ 0, 108, 192, 36 ],
+                [ 0, 144, 256, 36 ],
+                [ 0, 180, 320, 36 ],
+                [ 0, 216, 384, 36 ]
+            ]
+        },
+        {
+            "type": "fadecandy",
+            "serial": "xxxxxxxxxxxxxxxxx",
+	    "led": false,
+            "map": [
+                [ 0, 252, 0, 36 ],
+                [ 0, 288, 64, 36 ],
+                [ 0, 324, 128, 36 ],
+                [ 0, 360, 192, 36 ],
+                [ 0, 396, 256, 36 ],
+                [ 0, 432, 320, 36 ],
+                [ 0, 468, 384, 36 ]
+            ]
+        }
+    ]
+}
+
 You can read more about the project on my wifes blog here:
   https://nakri.no/2015/the-bookshelf-that-went-viral/
   https://nakri.no/2015/the-bookshelf-updated-tetris/
