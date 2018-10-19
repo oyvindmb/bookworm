@@ -7,8 +7,8 @@ This project requires the Fadecandy Server to be set up and opc.js from https://
 
 The configuration file for fadecandy server is set up like this (not I use two fadecandy controllers):
 
-{
-    "listen": [null, 7890],
+  {
+      "listen": [null, 7890],
     "verbose": true,
 
     "color": {
@@ -46,7 +46,7 @@ The configuration file for fadecandy server is set up like this (not I use two f
             ]
         }
     ]
-}
+  }
 
 You can read more about the project on my wifes blog here:
   https://nakri.no/2015/the-bookshelf-that-went-viral/
