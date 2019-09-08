@@ -20,7 +20,7 @@ const client = new OPC('localhost', 7890);
 const joystick = new (require('./joystick/joystick.js'))(0, 3500, 350);
 
 const fs = new require('fs');
-const picture = JSON.parse(fs.readFileSync('./drawings/ring.json', 'utf8'));
+const picture = JSON.parse(fs.readFileSync('/home/omb/bookworm/drawings/ring.json', 'utf8'));
 let currentGame;
 let currentGameNr;
 let games;
