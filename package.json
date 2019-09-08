@@ -1,17 +1,18 @@
 {
-    "name": "bookworm",
-    "version": "0.0.0",
-    "dependencies": {
-	"joystick": "^0.1.2",
-	"keypress": "^0.2.1",
-	"onoff": "^1.0.3",
-	"pi-gpio": "^0.0.8"
-    },
-    "devDependencies": {
-	"eslint": "^3.11.1",
-	"eslint-config-airbnb": "^13.0.0",
-	"eslint-plugin-import": "^2.2.0",
-	"eslint-plugin-jsx-a11y": "^2.2.3",
-	"eslint-plugin-react": "^6.7.1"
-    }
+  "name": "bookworm",
+  "version": "0.0.0",
+  "dependencies": {
+    "joystick": "^0.1.2",
+    "keypress": "^0.2.1",
+    "onoff": "^1.0.3",
+    "pi-gpio": "^0.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0"
+  }
 }
