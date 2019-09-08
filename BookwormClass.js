@@ -233,7 +233,7 @@ class Bookworm {
             this.snake.body[i].point[j] = point[j] - totalPixels;
           }
         } else if (point[0] < 0) {
-          for (j = 0; j < point.length; i += 1) {
+          for (j = 0; j < point.length; j += 1) {
             this.snake.body[i].point[j] = point[j] + totalPixels;
           }
         }
