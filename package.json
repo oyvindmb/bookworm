@@ -2,6 +2,7 @@
   "name": "bookworm",
   "version": "0.0.0",
   "dependencies": {
+    "express": "^4.17.1",
     "joystick": "^0.1.2",
     "keypress": "^0.2.1",
     "onoff": "^1.0.3",

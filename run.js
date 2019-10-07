@@ -17,8 +17,12 @@
 // Requirements
 const OPC = new require('./opc/opc');
 const client = new OPC('localhost', 7890);
+const express = require('express');
 const joystick = new (require('./joystick/joystick.js'))(0, 3500, 350);
 
+
+const http = express();
+const port = 3000;
 const fs = new require('fs');
 const picture = JSON.parse(fs.readFileSync('/home/omb/bookworm/drawings/ring.json', 'utf8'));
 let currentGame;
@@ -50,5 +54,65 @@ function onjoybutton(input) {
 }
 // Joystick input
 joystick.on('button', onjoybutton);
+
+// Set up HTTP server
+http.get('/joystick/select', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 6
+  });
+  response.send('Select');
+});
+
+http.get('/joystick/down', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 14
+  });
+  response.send('Down');
+});
+
+http.get('/joystick/up', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 3
+  });
+  response.send('Up');
+});
+
+http.get('/joystick/left', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 11
+  });
+  response.send('Left');
+});
+
+http.get('/joystick/right', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 12
+  });
+  response.send('Right');
+});
+
+http.get('/joystick/a', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 0
+  });
+  response.send('A');
+});
+
+http.get('/joystick/b', (request, response) => {
+  onjoybutton({
+    value: 1,
+    number: 2
+  });
+  response.send('B');
+});
+
+http.listen(port);
+
 // Draw the bookshelf
 setInterval(draw, 100);
