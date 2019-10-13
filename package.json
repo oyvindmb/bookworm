@@ -2,6 +2,8 @@
   "name": "bookworm",
   "version": "0.0.0",
   "dependencies": {
+    "@jaames/iro": "^4.5.1",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "joystick": "^0.1.2",
     "keypress": "^0.2.1",

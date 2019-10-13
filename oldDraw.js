@@ -23,7 +23,7 @@
  */
 
 // Requirements
-const OPC = new require('./opc.js');
+const OPC = new require('./opc/opc.js');
 const fs = new require('fs');
 const keypress = new require('keypress');
 keypress(process.stdin);
@@ -50,7 +50,7 @@ let picture = [{
 // Standard input
 process.stdin.setRawMode(true);
 process.stdin.on('keypress', (chunk, key) => {
-  // console.log("Pressed:", key);
+  console.log("Pressed:", key);
   let i;
   let l;
   let point;
@@ -132,7 +132,7 @@ process.stdin.on('keypress', (chunk, key) => {
         s: picture[0].s,
         v: picture[0].v,
       });
-    } else if (key.name === 'enter') {
+    } else if (key.name === 'return') {
       fs.writeFile(filename, JSON.stringify(picture, null, 4), (err) => {
         if (err) {
           console.log(err);
@@ -142,6 +142,7 @@ process.stdin.on('keypress', (chunk, key) => {
       });
     } else if (key.name === 'l') {
       picture = JSON.parse(fs.readFileSync(filename, 'utf8'));
+      console.log(picture);
       for (l = 0; l < picture.length; l += 1) {
         // Quirk; need to set the blink time for each blinking point
         if (picture[l].blink) {
@@ -179,7 +180,13 @@ function draw() {
       }
 
       // Set point color
-      color = OPC.hsv(geom.hue, geom.s, geom.v);
+      if (geom.hue && geom.s && geom.v) {
+        color = OPC.hsv(geom.hue, geom.s, geom.v);        
+      } else {
+        color = [geom.r,geom.g,geom.b];
+      }
+
+      //console.log(i, color[0], color[1], color[2]);
       client.setPixel(geom.point[j], color[0], color[1], color[2]);
       notBlack.push(geom.point[j]);
     }
