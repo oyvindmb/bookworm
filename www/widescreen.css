@@ -3,3 +3,18 @@
     width: 33%;
     margin-bottom: 10px;
 }
+
+.inner_grid {
+    float:left;
+    width: 67%;
+    margin-bottom: 10px;
+}
+
+.column {
+    float: left;
+    width: 6%;
+    padding-bottom: 6%;
+    border-style: solid;
+    border-color: white;
+    background-color: black;
+}
