@@ -201,3 +201,7 @@ function turnOn() {
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.send(JSON.stringify({on: true}));
 }
+
+function gamepad() {
+    window.location.href = document.location.href + 'gamepad.html';
+}
