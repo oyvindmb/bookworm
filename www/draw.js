@@ -189,3 +189,15 @@ function setHexInput() {
 function pickColorFromGrid() {
     dropper = true;
 }
+
+function turnOff() {
+    xhttp.open('POST', '/node/relay', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.send(JSON.stringify({off: true}));
+}
+
+function turnOn() {
+    xhttp.open('POST', '/node/relay', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.send(JSON.stringify({on: true}));
+}

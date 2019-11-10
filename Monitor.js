@@ -22,6 +22,11 @@
  * if it senses movement. Off if no movement is detected for more than 60 minutes.
  */
 const { Gpio } = require('onoff');
+const express = require('express');
+const http = express();
+const port = 3001;
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
 const pir = new Gpio(17, 'in', 'both');
 const relay = new Gpio(27, 'out');
@@ -30,6 +35,7 @@ const relay = new Gpio(27, 'out');
 // but storing the light-value saves reading it every time the PIR sensor goes off
 let light = 1;
 let idleTime = 0;
+let override = 0;
 const maxIdle = 60 * 60; // In seconds
 
 // The relay is non-latching and starts in the off position, so turn on now
@@ -42,6 +48,7 @@ function exit() {
 }
 
 pir.watch((err, value) => {
+  if (override) { return; }
   if (err) exit();
   if (value === 1) {
     idleTime = 0;
@@ -63,6 +70,24 @@ function testIdle() {
     console.log('Turned bookshelf off ', new Date());
   }
 }
+
+// Set up HTTP server
+http.post('/node/relay', jsonParser, (request, response) => {
+  const body = request.body;
+  if (body.off) {
+    relay.writeSync(0);
+    light = 0;
+    override = 1;
+  } else if (body.on) {
+    relay.writeSync(1);
+    light = 1;
+    override = 0;
+    idleTime = 0;
+  }
+  response.send('Ok');
+});
+
 setInterval(testIdle, 1000);
+http.listen(port);
 
 console.log('Monitor started', new Date());
