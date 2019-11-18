@@ -192,12 +192,14 @@
     <br>
     <label for="rainbowSpeedInput">Speed</label>
     <input id="rainbowSpeedInput" type="text" class="myText" value="0.002" style="width:50px">
-    <label for="rainbowIntensityInput">Instensity</label>
+    <label for="rainbowIntensityInput">Intensity</label>
     <input id="rainbowIntensityInput" type="text" class="myText" value="0.8" style="width:50px">
     <button class="myButton" onclick="setRainbow()">Rainbow</button>
     <br>
     <button class="myButton" onclick="turnOff()">Turn off</button>
     <button class="myButton" onclick="turnOn()">Turn on</button>
+    <button class="myButton" onclick="setIdle()">Set idle</button>
+    <button id="relayCurrentState" class="redButton" onclick="getRelayState()">Off</button>
     <br>
     <button class="myButton" onclick="gamepad()">Gamepad</button>
   </div>

@@ -190,17 +190,46 @@ function pickColorFromGrid() {
     dropper = true;
 }
 
+function getRelayState() {
+  const xhttpget = new XMLHttpRequest();
+  xhttpget.open('GET', '/node/relay', true);
+  xhttpget.onload = function() {
+    if (xhttpget.responseText === 'On') {
+      document.getElementById('relayCurrentState').className = 'greenButton';
+      document.getElementById('relayCurrentState').innerHTML = 'On';
+    } else {
+      document.getElementById('relayCurrentState').className = 'redButton';
+      document.getElementById('relayCurrentState').innerHTML = 'Off';
+    }
+  };
+  xhttpget.send(null);
+}
+
 function turnOff() {
     xhttp.open('POST', '/node/relay', true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.send(JSON.stringify({off: true}));
+    document.getElementById('relayCurrentState').className = 'redButton';
+    document.getElementById('relayCurrentState').innerHTML = 'Off';
 }
 
 function turnOn() {
     xhttp.open('POST', '/node/relay', true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.send(JSON.stringify({on: true}));
+    document.getElementById('relayCurrentState').className = 'greenButton';
+    document.getElementById('relayCurrentState').innerHTML = 'On';    
 }
+
+function setIdle() {
+    xhttp.open('POST', '/node/relay', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.send(JSON.stringify({idle: true}));
+    document.getElementById('relayCurrentState').className = 'redButton';
+    document.getElementById('relayCurrentState').innerHTML = 'Off';
+}
+
+getRelayState();
 
 function gamepad() {
     window.location.href = document.location.href + 'gamepad.html';

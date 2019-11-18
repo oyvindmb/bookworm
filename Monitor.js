@@ -83,8 +83,19 @@ http.post('/node/relay', jsonParser, (request, response) => {
     light = 1;
     override = 0;
     idleTime = 0;
+  } else if (body.idle) {
+    idleTime = 60*60;
+    override = 0;
   }
   response.send('Ok');
+});
+
+http.get('/node/relay', (request, response) => {
+  if (relay.readSync()) {
+    response.send('On');
+  } else {
+    response.send('Off');
+  }
 });
 
 setInterval(testIdle, 1000);

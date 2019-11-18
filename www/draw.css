@@ -75,3 +75,47 @@
 	position:relative;
 	top:1px;
 }
+
+.redButton {
+    margin-top: 5px;
+	box-shadow: 0px 1px 0px 0px #f0f7fa;
+	background:linear-gradient(to bottom, #f22930 5%, #c92228 100%);
+	background-color:#f22930;
+	border-radius:6px;
+	border:1px solid #057fd0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #5b6178;
+}
+.redButton:active {
+	position:relative;
+	top:1px;
+}
+
+.greenButton {
+    margin-top: 5px;
+	box-shadow: 0px 1px 0px 0px #f0f7fa;
+	background:linear-gradient(to bottom, #33f72d 5%, #2acc25 100%);
+	background-color:#33f72d;
+	border-radius:6px;
+	border:1px solid #057fd0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px -1px 0px #5b6178;
+}
+.greenButton:active {
+	position:relative;
+	top:1px;
+}
