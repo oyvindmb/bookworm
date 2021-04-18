@@ -23,20 +23,42 @@
  */
 
 // Requirements
-const OPC = new require('./opc/opc');
+/*const OPC = new require('./opc/opc');
 const client = new OPC('localhost', 7890);
 const express = require('express');
 const http = express();
 const port = 3000;
 const fs = new require('fs');
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
-const rainbowIntensity = 0.7;
-const rainbowSpeed = 0.002;
-const start = new Date();
-const gridSize = [28, 64]; // 28*64 = 1792 total pixels
-const blinkSpeed = 5000;
-let picture = [{"point":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8},
+const jsonParser = bodyParser.json();*/
+
+class Draw {
+  constructor(client, OPC, switchGame, http) {
+    this.client = client;
+    this.OPC = OPC;
+    this.http = http;
+    this.fs = new require('fs');
+    this.bodyParser = new require('body-parser');
+    this.jsonParser = this.bodyParser.json();
+    this.switchGame = switchGame;
+    this.rainbowIntensity = 0.7;
+    this.rainbowSpeed = 0.002;
+    this.start = new Date();
+    this.gridSize = [28, 64]; // 28*64 = 1792 total pixels
+    this.blinkSpeed = 5000;
+    this.joyMapping = {
+      12: 'return',
+      13: 'restart',
+      0: 'up',
+      1: 'down',
+      2: 'left',
+      3: 'right',
+      7: 'up',
+      4: 'down',
+      6: 'left',
+      5: 'right'
+    };
+    this.picture = [{"point":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8},
                {"point":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8},
                {"point":[32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8},
                {"point":[48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8},
@@ -150,70 +172,81 @@ let picture = [{"point":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"r":21,"g":255,"
                {"point":[1776,1777,1778,1779,1780,1781,1782,1783,1784,1785,1786,1787,1788,1789,1790,1791],"r":21,"g":255,"b":0,"special":"rainbow","speed":0.002,"intensity":0.8}
             ];
 
-// Set up HTTP server
-http.post('/node/draw', jsonParser, (request, response) => {
-  picture = request.body;
-  response.send('Ok');
-});
+    // Set up HTTP server
+    http.post('/node/draw', this.jsonParser, (request, response) => {
+      this.picture = request.body;
+      response.send('Ok');
+    });
+  }
+  
+  onJoyButton(input) {
+    // Only respond to keydown, and ignore other buttons than those mapped.
+    const key = this.joyMapping[input.number];
+    if (input.value && key && key === 'return') {
+      this.switchGame();
+    }
+  }
 
-function draw() {
-  let i;
-  let j;
-  let color;
-  let hue;
-  let millis = (new Date() - start);
-  let blinkMillis;
-  const notBlack = [];
+  draw() {
+    let i;
+    let j;
+    let color;
+    let hue;
+    let millis = (new Date() - this.start);
+    let blinkMillis;
+    const notBlack = [];
 
-  // Paint the picture
-  for (i = 0; i < picture.length; i += 1) {
-    const geom = picture[i];
-    for (j = 0; j < geom.point.length; j += 1) {
+    // Paint the picture
+    for (i = 0; i < this.picture.length; i += 1) {
+      const geom = this.picture[i];
+      for (j = 0; j < geom.point.length; j += 1) {
 
-      // Set point color
-      if (geom.special === 'rainbow') {
-        if (!geom.speed) { geom.speed = rainbowSpeed; }
-        if (!geom.intensity) { geom.intensity = rainbowIntensity; }
-        // The multiplied factor at the end determines the change of color between each
-        // pixel, so the "length" of each color along the strip
-        hue = (millis * geom.speed + geom.point[j] * 0.5) % 100;
-        color = OPC.hsv(hue / 100, 1, geom.intensity);
-      } else if (geom.special === 'blink') {
-        if (!geom.speed) { geom.speed = blinkSpeed; }
-        if (!geom.blink) {
-          geom.blink = new Date();
-        }
-        blinkMillis = (new Date() - geom.blink);
-        if (geom.waxWane) {
-          geom.v = blinkMillis / geom.speed;
+        // Set point color
+        if (geom.special === 'rainbow') {
+          if (!geom.speed) { geom.speed = this.rainbowSpeed; }
+          if (!geom.intensity) { geom.intensity = this.rainbowIntensity; }
+          // The multiplied factor at the end determines the change of color between each
+          // pixel, so the "length" of each color along the strip
+          hue = (millis * geom.speed + geom.point[j] * 0.5) % 100;
+          color = this.OPC.hsv(hue / 100, 1, geom.intensity);
+        } else if (geom.special === 'blink') {
+          if (!geom.speed) { geom.speed = this.blinkSpeed; }
+          if (!geom.blink) {
+            geom.blink = new Date();
+          }
+          blinkMillis = (new Date() - geom.blink);
+          if (geom.waxWane) {
+            geom.v = blinkMillis / geom.speed;
+          } else {
+            geom.v = (geom.speed - blinkMillis) / geom.speed;
+          }
+
+          if (blinkMillis > geom.speed) {
+            geom.blink = new Date();
+            geom.waxWane = !geom.waxWane;
+          }
+          color = this.OPC.hsv(geom.h, geom.s, geom.v);
+        } else if (geom.h && geom.s && geom.v) {
+          color = this.OPC.hsv(geom.h, geom.s, geom.v);
         } else {
-          geom.v = (geom.speed - blinkMillis) / geom.speed;
+          color = [geom.r,geom.g,geom.b];
         }
 
-        if (blinkMillis > geom.speed) {
-          geom.blink = new Date();
-          geom.waxWane = !geom.waxWane;
-        }
-        color = OPC.hsv(geom.h, geom.s, geom.v);
-      } else if (geom.h && geom.s && geom.v) {
-        color = OPC.hsv(geom.h, geom.s, geom.v);
-      } else {
-        color = [geom.r,geom.g,geom.b];
+        this.client.setPixel(geom.point[j], color[0], color[1], color[2]);
+        notBlack.push(geom.point[j]);
       }
-
-      client.setPixel(geom.point[j], color[0], color[1], color[2]);
-      notBlack.push(geom.point[j]);
     }
-  }
 
-  // Set the other pixels black
-  for (i = 0; i < 16 * 8 * 14; i += 1) {
-    if (notBlack.indexOf(i) === -1) {
-      client.setPixel(i, 0, 0, 0);
+    // Set the other pixels black
+    for (i = 0; i < 16 * 8 * 14; i += 1) {
+      if (notBlack.indexOf(i) === -1) {
+        this.client.setPixel(i, 0, 0, 0);
+      }
     }
+    this.client.writePixels();
   }
-  client.writePixels();
 }
+module.exports = Draw;
 
-http.listen(port);
-setInterval(draw, 10);
+//http.listen(port);
+//setInterval(draw, 10);

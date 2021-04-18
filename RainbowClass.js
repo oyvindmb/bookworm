@@ -27,16 +27,16 @@ class Rainbow {
     this.switchGame = switchGame;
     this.start = new Date();
     this.joyMapping = {
-      6: 'return',
-      7: 'restart',
-      3: 'up',
-      0: 'down',
+      12: 'return',
+      13: 'restart',
+      0: 'up',
+      1: 'down',
       2: 'left',
-      1: 'right',
-      13: 'up',
-      14: 'down',
-      11: 'left',
-      12: 'right'
+      3: 'right',
+      7: 'up',
+      4: 'down',
+      6: 'left',
+      5: 'right'
     };
   }
 
@@ -45,8 +45,8 @@ class Rainbow {
     let pixel;
     let hue;
     let color;
-    for (pixel = 0; pixel < 4 * 9 * 14; pixel += 1) {
-      hue = (millis * this.speed + pixel * 2.0) % 100;
+    for (pixel = 0; pixel < 16 * 8 * 14; pixel += 1) {
+      hue = (millis * this.speed + pixel * 0.5) % 100;
       color = this.OPC.hsv(hue / 100, 1, this.intensity);
       this.client.setPixel(pixel, color[0], color[1], color[2]);
     }
@@ -56,7 +56,7 @@ class Rainbow {
   onJoyButton(input) {
     // Only respond to keydown, and ignore other buttons than those mapped.
     if (input.value === 0) return;
-    // Only respond to keydown, and ignore other buttons than those mapped.
+
     const key = this.joyMapping[input.number];
     if (input.value && key && key === 'return') {
       this.switchGame();

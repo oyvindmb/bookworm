@@ -66,7 +66,7 @@ function setColor(div) {
 function setAll() {
     var i;
     var div;
-    for (i=0; i < 504; i = i+4) {
+    for (i=0; i < 1792; i = i+16) {
         div = document.getElementById(i);
         div.style.background = ''; // In case it used to be rainbow
         div.style.backgroundColor = pickedColor.hexString;
@@ -138,7 +138,7 @@ function picture() {
     var div;
     var point;
     var hsv;
-    for (i=0; i < 504; i = i+4) {
+    for (i=0; i < 1792; i = i+16) {
         div = document.getElementById(i);
         rgbString = div.getAttribute('rgb');
         if (!rgbString) {
@@ -147,7 +147,7 @@ function picture() {
             rgb = JSON.parse(rgbString);
         }
         point = {
-            point: [i,i+1,i+2,i+3],
+            point: [i,i+1,i+2,i+3,i+4,i+5,i+6,i+7,i+8,i+9,i+10,i+11,i+12,i+13,i+14,i+15],
             r: rgb.r,
             g: rgb.g,
             b: rgb.b

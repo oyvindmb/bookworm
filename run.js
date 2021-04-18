@@ -39,9 +39,11 @@ function switchGame() {
 const tetris = new (require('./TetrisClass.js'))(35, 2000, 5000, 50, picture, client, OPC,
   switchGame);
 const bookworm = new (require('./BookwormClass.js'))(35, 5000, picture, client, OPC, switchGame);
-const rainbow = new (require('./RainbowClass.js'))(0.002, 0.8, client, OPC, switchGame);
+//const rainbow = new (require('./RainbowClass.js'))(0.002, 0.7, client, OPC, switchGame);
+const drawGame = new (require('./DrawClass.js'))(client, OPC, switchGame, http);
 
-games = [rainbow, bookworm, tetris];
+//games = [rainbow, bookworm, tetris];
+games = [drawGame, bookworm, tetris];
 currentGameNr = 0;
 currentGame = games[currentGameNr];
 
@@ -59,7 +61,7 @@ joystick.on('button', onjoybutton);
 http.get('/joystick/select', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 6
+    number: 12
   });
   response.send('Select');
 });
@@ -67,7 +69,7 @@ http.get('/joystick/select', (request, response) => {
 http.get('/joystick/down', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 14
+    number: 1
   });
   response.send('Down');
 });
@@ -75,7 +77,7 @@ http.get('/joystick/down', (request, response) => {
 http.get('/joystick/up', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 3
+    number: 0
   });
   response.send('Up');
 });
@@ -83,7 +85,7 @@ http.get('/joystick/up', (request, response) => {
 http.get('/joystick/left', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 11
+    number: 2
   });
   response.send('Left');
 });
@@ -91,7 +93,7 @@ http.get('/joystick/left', (request, response) => {
 http.get('/joystick/right', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 12
+    number: 3
   });
   response.send('Right');
 });
@@ -99,7 +101,7 @@ http.get('/joystick/right', (request, response) => {
 http.get('/joystick/a', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 0
+    number: 4
   });
   response.send('A');
 });
@@ -107,7 +109,7 @@ http.get('/joystick/a', (request, response) => {
 http.get('/joystick/b', (request, response) => {
   onjoybutton({
     value: 1,
-    number: 2
+    number: 5
   });
   response.send('B');
 });

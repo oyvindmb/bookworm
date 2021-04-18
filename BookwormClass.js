@@ -33,28 +33,28 @@ class Bookworm {
     this.lastKey = null;
     this.grow = false;
     // TODO Generalize grid to own class?
-    this.gridSize = [14, 36]; // width, height i.e. total pixels 14*36 = 504
+    this.gridSize = [14, 128]; // width, height i.e. total pixels 14*128 = 1792
     this.bottomRow = [];
     this.topRow = [];
     for (i = 0; i < this.gridSize[0]; i += 1) {
       // One pixel in the bottom and top rows
-      this.bottomRow.push(i * this.gridSize[1]);
-      this.topRow.push((i * this.gridSize[1]) + (this.gridSize[1] - 1));
+      this.topRow.push(i * this.gridSize[1]);
+      this.bottomRow.push((i * this.gridSize[1]) + (this.gridSize[1] - 1));
     }
     this.winCondition = winCondition;
     this.winner = false;
     this.blinkSpeed = blinkSpeed;
     this.picture = picture;
     this.joyMapping = {
-      6: 'return',
-      3: 'up',
-      0: 'down',
+      12: 'return',
+      0: 'up',
+      1: 'down',
       2: 'left',
-      1: 'right',
-      13: 'up',
-      14: 'down',
-      11: 'left',
-      12: 'right'
+      3: 'right',
+      7: 'up',
+      4: 'down',
+      6: 'left',
+      5: 'right'
     };
     for (l = 0; l < this.picture.length; l += 1) {
       // Quirk; need to set the blink time for each blinking point
@@ -64,20 +64,20 @@ class Bookworm {
     this.snake = {
       // Start snake in lower right, upward moving, green
       body: [{
-        point: [12, 13, 14, 15],
-        dir: 'up',
+        point: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
+        dir: 'down',
         color: [0, 255, 0]
       }, {
-        point: [8, 9, 10, 11],
-        dir: 'up',
+        point: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+        dir: 'down',
         color: [0, 255, 0]
       }, {
-        point: [4, 5, 6, 7],
-        dir: 'up',
+        point: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+        dir: 'down',
         color: [0, 255, 0]
       }, {
-        point: [0, 1, 2, 3],
-        dir: 'up',
+        point: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        dir: 'down',
         color: [0, 255, 0]
       }],
       speed: 400,
@@ -85,7 +85,8 @@ class Bookworm {
     };
     // Definition of fruit sprite
     this.fruit = {
-      point: [268, 269, 270, 271], // First fruit is about mid-screen
+      point: [960, 961, 962, 963, 964, 965, 966, 967,
+              968, 969, 970, 971, 972, 973, 974, 975], // First fruit is about mid-screen
       color: [255, 0, 0], // First fruit is red
       colors: [
         [255, 0, 0],
@@ -164,22 +165,23 @@ class Bookworm {
     let i;
     let l;
     const { body } = this.snake;
+ 
     for (i = 0; i < body.length; i += 1) {
-      if (this.bottomRow.indexOf(body[i].point[0]) !== -1 && body[i].dir === 'up') {
+      if (this.bottomRow.indexOf(body[i].point[15]) !== -1 && body[i].dir === 'up') {
         // Top to bottom transition, continue snake on same column
-        for (l = 0; l < body[i].point.length; l += 1) {
-          body[i].point[l] -= this.gridSize[1];
-        }
-        return;
-      } if (this.topRow.indexOf(body[i].point[3]) !== -1 && body[i].dir === 'down') {
-        // Bottom to top transition, continue snake on same column
         for (l = 0; l < body[i].point.length; l += 1) {
           body[i].point[l] += this.gridSize[1];
         }
         return;
+      } if (this.topRow.indexOf(body[i].point[0]) !== -1 && body[i].dir === 'down') {
+        // Bottom to top transition, continue snake on same column
+        for (l = 0; l < body[i].point.length; l += 1) {
+          body[i].point[l] -= this.gridSize[1];
+        }
+        return;
       } if (body[i].point[0] === this.gridSize[0] * this.gridSize[1]) {
         // Corner case, literally
-        body[i].point = [0, 1, 2, 3];
+        body[i].point = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
       }
     }
   }
@@ -215,13 +217,13 @@ class Bookworm {
         // Move body part in accordance with it's current direction
         for (j = 0; j < point.length; j += 1) {
           if (body[i].dir === 'up') {
-            this.snake.body[i].point[j] = point[j] + point.length;
-          } else if (body[i].dir === 'down') {
             this.snake.body[i].point[j] = point[j] - point.length;
+          } else if (body[i].dir === 'down') {
+            this.snake.body[i].point[j] = point[j] + point.length;
           } else if (body[i].dir === 'left') {
-            this.snake.body[i].point[j] = point[j] + this.gridSize[1];
-          } else if (body[i].dir === 'right') {
             this.snake.body[i].point[j] = point[j] - this.gridSize[1];
+          } else if (body[i].dir === 'right') {
+            this.snake.body[i].point[j] = point[j] + this.gridSize[1];
           }
         }
         // Minimum brightness for head, full for the rest
@@ -287,20 +289,20 @@ class Bookworm {
       // Game Over, reinit snake
       this.snake = {
         body: [{
-          point: [12, 13, 14, 15],
-          dir: 'up',
+          point: [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
+          dir: 'down',
           color: [0, 255, 0]
         }, {
-          point: [8, 9, 10, 11],
-          dir: 'up',
+          point: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
+          dir: 'down',
           color: [0, 255, 0]
         }, {
-          point: [4, 5, 6, 7],
-          dir: 'up',
+          point: [16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
+          dir: 'down',
           color: [0, 255, 0]
         }, {
-          point: [0, 1, 2, 3],
-          dir: 'up',
+          point: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+          dir: 'down',
           color: [0, 255, 0]
         }],
         speed: 400,
@@ -312,13 +314,16 @@ class Bookworm {
   }
 
   randomSquare() {
-    const high = this.gridSize[0] * (this.gridSize[1] / 4); // Number of squares
+    const high = this.gridSize[0] * (this.gridSize[1] / 16); // Number of squares
     const low = 0;
     let start = Math.floor((Math.random() * (high - (low + 1))) + low);
     if (start > 0) {
-      start *= 4; // Since there are actually four pixels per square
+      start *= 16; // Since there are actually four pixels per square
     }
-    return [start, start + 1, start + 2, start + 3];
+    return [start, start + 1, start + 2, start + 3,
+            start + 4, start + 5, start + 6, start + 7,
+            start + 8, start + 9, start + 10, start + 11,
+            start + 12, start + 13, start + 14, start + 15];
   }
 
   pointInSnakeBody(point) {
@@ -389,7 +394,7 @@ class Bookworm {
       }
     }
     // Set the black background
-    for (i = 0; i < 4 * 9 * 14; i += 1) {
+    for (i = 0; i < 16 * 8 * 14; i += 1) {
       if (notBlack.indexOf(i) === -1) {
         this.client.setPixel(i, 0, 0, 0);
       }

@@ -50,31 +50,32 @@ class Tetris {
     }
 
     // Defining the display grid
-    this.gridSize = [14, 9];
-    this.cellSize = 4;
+    this.gridSize = [14, 8];
+    this.cellSize = 16;
     this.grid = []; // Column, Row
     [this.w, this.h] = this.gridSize;
 
-    // Slightly confusing since I'm reversing the grid. Upper left is now 1,1, lower right is 14,9
-    for (i = this.w - 1; i >= 0; i -= 1) {
-      this.grid[this.w - i] = [];
-      for (j = this.h - 1; j >= 0; j -= 1) {
-        this.grid[this.w - i][this.h - j] = [];
+    for (i = 1; i <= this.w; i += 1) {
+      this.grid[i] = [];
+      for (j = 1; j <= this.h; j += 1) {
+        this.grid[i][j] = [];
         for (k = 0; k < this.cellSize; k += 1) {
-          this.grid[this.w - i][this.h - j][k] = (j * this.cellSize)
-            + k + (i * this.h * this.cellSize);
+          this.grid[i][j][k] = ((j-1) * this.cellSize) +
+          k + ((i-1) * this.h * this.cellSize);
         }
       }
     }
-
+    
     // Joystick input
     this.joyMapping = {
-      6: 'return',
-      0: 'q', // rotate left
-      2: 'w', // rotate right,
-      14: 'down',
-      11: 'left',
-      12: 'right'
+      12: 'return',
+      6: 'q', // rotate left
+      5: 'w', // rotate right,
+      4: 'q',
+      7: 'w',
+      1: 'down',
+      2: 'left',
+      3: 'right'
     };
 
     // Define the Tetris pieces
@@ -378,6 +379,7 @@ class Tetris {
     }
 
     const key = this.joyMapping[input.number];
+    
     if (input.value && key && key === 'return') {
       this.switchGame();
     } else if (key && ['q', 'w'].indexOf(key) !== -1) {
