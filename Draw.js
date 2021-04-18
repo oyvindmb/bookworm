@@ -23,7 +23,7 @@
  */
 
 // Requirements
-const OPC = new require('./opc/opc');
+const OPC = new require('./dist/opc');
 const client = new OPC('localhost', 7890);
 const express = require('express');
 const http = express();

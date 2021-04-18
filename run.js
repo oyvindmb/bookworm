@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // Requirements
-const OPC = new require('./opc/opc');
+const OPC = new require('./dist/opc');
 const client = new OPC('localhost', 7890);
 const express = require('express');
 const joystick = new (require('./joystick/joystick.js'))(0, 3500, 350);
