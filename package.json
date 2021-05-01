@@ -7,7 +7,7 @@
     "express": "^4.17.1",
     "joystick": "^0.1.2",
     "keypress": "^0.2.1",
-    "onoff": "^1.0.3",
+    "onoff": "^6.0.3",
     "pi-gpio": "^0.0.8"
   },
   "devDependencies": {

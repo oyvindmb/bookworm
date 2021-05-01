@@ -28,8 +28,9 @@ const port = 3001;
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const pir = new Gpio(17, 'in', 'both');
-const relay = new Gpio(27, 'out');
+const pir = new Gpio(25, 'in', 'both');
+const relay = new Gpio(23, 'out');
+const relay2 = new Gpio(24, 'out');
 
 // Could read position from relay.readSync(),
 // but storing the light-value saves reading it every time the PIR sensor goes off
@@ -37,9 +38,6 @@ let light = 1;
 let idleTime = 0;
 let override = 0;
 const maxIdle = 60 * 60; // In seconds
-
-// The relay is non-latching and starts in the off position, so turn on now
-relay.writeSync(1);
 
 function exit() {
   pir.unexport();
@@ -54,7 +52,8 @@ pir.watch((err, value) => {
     idleTime = 0;
     if (!light) {
       // Turn on light
-      relay.writeSync(1);
+      relay.writeSync(0);
+      relay2.writeSync(0);
       light = 1;
       console.log('Turned bookshelf on ', new Date());
     }
@@ -65,7 +64,8 @@ function testIdle() {
   idleTime += 1;
   if (idleTime > maxIdle && light) {
     // Turn off light
-    relay.writeSync(0);
+    relay.writeSync(1);
+    relay2.writeSync(1);
     light = 0;
     console.log('Turned bookshelf off ', new Date());
   }
@@ -75,11 +75,13 @@ function testIdle() {
 http.post('/node/relay', jsonParser, (request, response) => {
   const body = request.body;
   if (body.off) {
-    relay.writeSync(0);
+    relay.writeSync(1);
+    relay2.writeSync(1);
     light = 0;
     override = 1;
   } else if (body.on) {
-    relay.writeSync(1);
+    relay.writeSync(0);
+    relay2.writeSync(0);
     light = 1;
     override = 0;
     idleTime = 0;
@@ -91,7 +93,7 @@ http.post('/node/relay', jsonParser, (request, response) => {
 });
 
 http.get('/node/relay', (request, response) => {
-  if (relay.readSync()) {
+  if (!relay.readSync()) {
     response.send('On');
   } else {
     response.send('Off');
