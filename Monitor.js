@@ -31,6 +31,7 @@ const jsonParser = bodyParser.json();
 const pir = new Gpio(25, 'in', 'both');
 const relay = new Gpio(23, 'out');
 const relay2 = new Gpio(24, 'out');
+const relay3 = new Gpio(18, 'out');
 
 // Could read position from relay.readSync(),
 // but storing the light-value saves reading it every time the PIR sensor goes off
@@ -42,6 +43,8 @@ const maxIdle = 60 * 60; // In seconds
 function exit() {
   pir.unexport();
   relay.unexport();
+  relay2.unexport();
+  relay3.unexport();
   process.exit();
 }
 
@@ -54,6 +57,7 @@ pir.watch((err, value) => {
       // Turn on light
       relay.writeSync(0);
       relay2.writeSync(0);
+      relay3.writeSync(0);
       light = 1;
       console.log('Turned bookshelf on ', new Date());
     }
@@ -66,6 +70,7 @@ function testIdle() {
     // Turn off light
     relay.writeSync(1);
     relay2.writeSync(1);
+    relay3.writeSync(1);
     light = 0;
     console.log('Turned bookshelf off ', new Date());
   }
@@ -77,11 +82,13 @@ http.post('/node/relay', jsonParser, (request, response) => {
   if (body.off) {
     relay.writeSync(1);
     relay2.writeSync(1);
+    relay3.writeSync(1);
     light = 0;
     override = 1;
   } else if (body.on) {
     relay.writeSync(0);
     relay2.writeSync(0);
+    relay3.writeSync(0);
     light = 1;
     override = 0;
     idleTime = 0;

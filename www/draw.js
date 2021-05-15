@@ -66,8 +66,9 @@ function setColor(div) {
 function setAll() {
     var i;
     var div;
-    for (i=0; i < 1792; i = i+16) {
+    for (i=0; i < 2048; i = i+16) {
         div = document.getElementById(i);
+        if (!div) {continue;}
         div.style.background = ''; // In case it used to be rainbow
         div.style.backgroundColor = pickedColor.hexString;
         if (pickedColor.special === 'rainbow') {
@@ -127,7 +128,6 @@ function setBlink() {
 }
 
 function setRainbow() {
-    // TODO Set rainbow color to background
     pickedColor.special = 'rainbow';
 }
 
@@ -138,8 +138,11 @@ function picture() {
     var div;
     var point;
     var hsv;
-    for (i=0; i < 1792; i = i+16) {
+    for (i=0; i < 2048; i = i+16) {
         div = document.getElementById(i);
+        if (!div) {
+            continue;
+        }
         rgbString = div.getAttribute('rgb');
         if (!rgbString) {
             rgb = {r:0,g:0,b:0};

@@ -32,3 +32,13 @@
     border-color: white;
     background-color: black;
 }
+
+.topColumn {
+    float: left;
+    width: 5%;
+    height: 2.5%;
+    padding-bottom: 6%;
+    border-style: solid;
+    border-color: white;
+    background-color: black;
+}
