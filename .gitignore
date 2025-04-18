@@ -1,0 +1,11 @@
+www/gamepad.js
+www/gamepad.css
+www/iro.min.js
+www/gamepad.html
+joystick/
+drawings/
+node_modules/
+package-lock.json
+turn_on.sh
+picture.json
+.gitignore~

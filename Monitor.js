@@ -37,6 +37,7 @@ const relay3 = new Gpio(18, 'out');
 // but storing the light-value saves reading it every time the PIR sensor goes off
 let light = 1;
 let idleTime = 0;
+let singleIdleTime = 0;
 let override = 0;
 const maxIdle = 60 * 60; // In seconds
 
@@ -52,8 +53,12 @@ pir.watch((err, value) => {
   if (override) { return; }
   if (err) exit();
   if (value === 1) {
-    idleTime = 0;
-    if (!light) {
+    // 2025-04-17/omb My PIR sensor seems to give a single errant pulse every few minutes, so I require two within 10 secs
+    if (singleIdleTime < 10) {
+      console.log('DoubleIdle time reset', idleTime, "light: ", light, new Date());
+      idleTime = 0;
+    }	
+    if (!light && idleTime < 1) {
       // Turn on light
       relay.writeSync(0);
       relay2.writeSync(0);
@@ -61,11 +66,15 @@ pir.watch((err, value) => {
       light = 1;
       console.log('Turned bookshelf on ', new Date());
     }
+    //console.log('SingleIdle time reset', singleIdleTime, idleTime, "light: ", light, new Date());
+    singleIdleTime = 0;
   }
 });
 
 function testIdle() {
   idleTime += 1;
+  singleIdleTime += 1;  
+  //console.log('Idle time', idleTime, light);
   if (idleTime > maxIdle && light) {
     // Turn off light
     relay.writeSync(1);
