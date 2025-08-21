@@ -45,17 +45,34 @@ class Bookworm {
     this.winner = false;
     this.blinkSpeed = blinkSpeed;
     this.picture = picture;
-    this.joyMapping = {
-      12: 'return',
-      0: 'up',
-      1: 'down',
-      2: 'left',
-      3: 'right',
-      7: 'up',
-      4: 'down',
-      6: 'left',
-      5: 'right'
+    this.joyMapping = function joyMapping(input) {
+      if (input.type === 'axis') {
+        if (input.number === 0 || input.number === 1) { return; }
+	if (input.value > 0) {
+          if (input.number === 7) {
+            return 'down';
+          } else {
+            return 'right';
+          }
+        } else {
+          if (input.number === 7) {
+            return 'up';
+          } else {
+            return 'left';
+          }
+        }
+      } else {
+        return {
+          7: 'return',
+          6: 'restart',
+          3: 'up',
+          0: 'down',
+          2: 'left',
+          1: 'right'
+        }[input.number];
+      }
     };
+
     for (l = 0; l < this.picture.length; l += 1) {
       // Quirk; need to set the blink time for each blinking point
       if (this.picture[l].blink) this.picture[l].blink = new Date();
@@ -153,7 +170,7 @@ class Bookworm {
 
   onJoyButton(input) {
     // Only respond to keydown, and ignore other buttons than those mapped.
-    const key = this.joyMapping[input.number];
+    const key = this.joyMapping(input);
     if (input.value && key && key === 'return') {
       this.switchGame();
     } else if (input.value && key) {

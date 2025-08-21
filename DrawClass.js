@@ -37,16 +37,12 @@ class Draw {
     this.start = new Date();
     this.blinkSpeed = 5000;
     this.joyMapping = {
-      12: 'return',
-      13: 'restart',
-      0: 'up',
-      1: 'down',
+      7: 'return',
+      6: 'restart',
+      3: 'up',
+      0: 'down',
       2: 'left',
-      3: 'right',
-      7: 'up',
-      4: 'down',
-      6: 'left',
-      5: 'right'
+      1: 'right',
     };
     this.picture = [{"point":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"r":0,"g":0,"b":0,"special":"rainbow","speed":0.002,"intensity":0.5},
                {"point":[16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],"r":0,"g":0,"b":0,"special":"rainbow","speed":0.002,"intensity":0.5},

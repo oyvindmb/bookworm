@@ -66,16 +66,32 @@ class Tetris {
       }
     }
     
-    // Joystick input
-    this.joyMapping = {
-      12: 'return',
-      6: 'q', // rotate left
-      5: 'w', // rotate right,
-      4: 'q',
-      7: 'w',
-      1: 'down',
-      2: 'left',
-      3: 'right'
+    this.joyMapping = function joyMapping(input) {
+      if (input.type === 'axis') {
+        if (input.number === 0 || input.number === 1) { return; }
+        if (input.value > 0) {
+          if (input.number === 7) {
+            return 'down';
+          } else {
+            return 'right';
+          }
+        } else {
+          if (input.number === 7) {
+            return 'up';
+          } else {
+            return 'left';
+          }
+        }
+      } else {
+        return {
+          7: 'return',
+          6: 'restart',
+          3: 'q',
+          0: 'w',
+          2: 'q',
+          1: 'w'
+        }[input.number];
+      }
     };
 
     // Define the Tetris pieces
@@ -378,14 +394,16 @@ class Tetris {
       return;
     }
 
-    const key = this.joyMapping[input.number];
+    const key = this.joyMapping(input);
     
-    if (input.value && key && key === 'return') {
-      this.switchGame();
-    } else if (key && ['q', 'w'].indexOf(key) !== -1) {
-      this.rotatePiece(key);
-    } else {
-      this.movePiece(key);
+    if (key) {
+      if (input.value && key === 'return') {
+        this.switchGame();
+      } else if (['q', 'w'].indexOf(key) !== -1) {
+        this.rotatePiece(key);
+      } else {
+        this.movePiece(key);
+      }
     }
   }
 

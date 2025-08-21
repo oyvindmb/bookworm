@@ -18,7 +18,7 @@
 const OPC = new require('./dist/opc');
 const client = new OPC('localhost', 7890);
 const express = require('express');
-const joystick = new (require('./joystick/joystick.js'))(0, 3500, 350);
+const joystick = new (require('joystick'))(0, 3500, 350);
 
 
 const http = express();
@@ -56,6 +56,7 @@ function onjoybutton(input) {
 }
 // Joystick input
 joystick.on('button', onjoybutton);
+joystick.on('axis', onjoybutton);
 
 // Set up HTTP server
 http.get('/joystick/select', (request, response) => {
